@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Assets.LoopGame.Scripts.Player
 {
     [RequireComponent(typeof(BoxCollider2D))]
-    public class CarriageObjBounce : MonoBehaviour
+    public class CarriageObjBall : MonoBehaviour
     {
         private BoxCollider2D _collider;
         private void Start()
