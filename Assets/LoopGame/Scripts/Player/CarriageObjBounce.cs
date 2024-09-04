@@ -22,8 +22,12 @@ namespace Assets.LoopGame.Scripts.Player
             if (pushI != null)
             {
 
-                float bit = 1 / (_collider.bounds.size.x*1.2f / 2);
+                float bit = 1 / (_collider.bounds.size.x*0.9f / 2);
                 float pointX = collision.gameObject.transform.position.x - gameObject.transform.position.x;
+                if(Mathf.Abs(pointX) > 0.8)
+                {
+                    pointX = pointX > 0 ? 0.8f : -0.8f;
+                }
                 float pointY = Mathf.Sin(Mathf.PI/(pointX*bit));
                 Vector2 direction = new Vector2(pointX, Mathf.Abs(pointY));
                 pushI.Push(direction);
