@@ -16,9 +16,6 @@ namespace Assets.LoopGame.Scripts.Ball
             if (health != null)
             {
                 health.SubHealth(forceAttack);
-            } else
-            {
-                Debug.Log("Null");
             }
         }
     }

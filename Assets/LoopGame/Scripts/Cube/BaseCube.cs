@@ -1,12 +1,18 @@
 ﻿using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.SocialPlatforms.Impl;
 
 namespace Assets.LoopGame.Scripts.Cube
 {
     [RequireComponent(typeof(BoxCollider2D),typeof(Rigidbody2D))]
     public class BaseCube : MonoBehaviour, IHealth
     {
-        private int _health = 1;
+        [SerializeField] private int _health = 1;
+        [SerializeField] private int _cost = 1;
+        private GameProperty _score;
+        public void Construct(GameProperty score)
+        {
+            _score = score;
+        }
 
         public void AddHealth(int value)
         {
@@ -25,8 +31,9 @@ namespace Assets.LoopGame.Scripts.Cube
             }
         }
 
-        private void DestroyCube()
+        protected virtual void DestroyCube()
         {
+            _score.Score = _cost; 
             Destroy(gameObject);
         }
 

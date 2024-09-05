@@ -1,4 +1,5 @@
 ﻿using Assets.LoopGame.Scripts.Ball;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Assets.LoopGame.Scripts.Player
@@ -22,16 +23,33 @@ namespace Assets.LoopGame.Scripts.Player
             if (pushI != null)
             {
 
-                float bit = 1 / (_collider.bounds.size.x*0.9f / 2);
+                float stepOffset = 1 / (_collider.bounds.size.x/ 2);
                 float pointX = collision.gameObject.transform.position.x - gameObject.transform.position.x;
                 if(Mathf.Abs(pointX) > 0.8)
                 {
                     pointX = pointX > 0 ? 0.8f : -0.8f;
                 }
-                float pointY = Mathf.Sin(Mathf.PI/(pointX*bit));
+                float pointY = Mathf.Sin(Mathf.PI/(pointX* stepOffset));
                 Vector2 direction = new Vector2(pointX, Mathf.Abs(pointY));
+                direction = CorrectAngle(direction, stepOffset);
                 pushI.Push(direction);
             }
+        }
+        private Vector2 CorrectAngle(Vector2 direction, float stepOffset)
+        {
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            if (angle < 0)
+            {
+                angle += 360f;
+            }
+            if (angle < 30)
+            {
+                direction.x -= stepOffset;
+            } else if(angle > 150)
+            {
+                direction.x += stepOffset;  
+            }
+            return direction;
         }
     }
 

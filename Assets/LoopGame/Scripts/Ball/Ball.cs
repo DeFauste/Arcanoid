@@ -28,13 +28,30 @@ namespace Assets.LoopGame.Scripts.Ball
             _rb.velocity = Vector2.zero;
             _rb.AddForce(direction.normalized * _speed,ForceMode2D.Impulse);
         }
-
+        private void FixedUpdate()
+        {
+            FixMoveAngle();
+        }
         public void ChangeParent(Transform parent)
         {
             transform.SetParent(parent);
             _rb.velocity = Vector2.zero;
             _isActive = !_isActive;
             _rb.bodyType = RigidbodyType2D.Dynamic;
+        }
+
+        private void FixMoveAngle()
+        {
+            float angle = Mathf.Atan2(_rb.velocity.y, _rb.velocity.x) * Mathf.Rad2Deg;
+            if (angle < 0)
+            {
+                angle += 360f;
+            }
+            if (angle > 160 && angle < 200 || angle < 30 && angle > 330)
+            {
+                Push(new Vector2(_rb.velocity.x * 0.83f, _rb.velocity.y));
+            }
+            //Debug.Log(angle);
         }
     }
 }
