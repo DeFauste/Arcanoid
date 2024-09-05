@@ -3,30 +3,26 @@ using UnityEngine.Rendering;
 
 namespace Assets.LoopGame.Scripts.Cube
 {
-    [RequireComponent(typeof(BoxCollider2D))]
-    public class BaseCube: MonoBehaviour, IHealth
+    [RequireComponent(typeof(BoxCollider2D),typeof(Rigidbody2D))]
+    public class BaseCube : MonoBehaviour, IHealth
     {
         private int _health = 1;
 
         public void AddHealth(int value)
         {
-            if(value > 0)
-            {
-                _health += value;
-            }
+            _health += Mathf.Abs(value);
         }
+
+        public int GetHealth() => _health;
 
         public void SubHealth(int value) 
         { 
-            if(value < 0)
-            {
-                _health -= value;
-                if (value < 0)
-                {
-                    DestroyCube();
-                }
-            }
 
+            _health -= Mathf.Abs(value);
+            if (_health <= 0)
+            {
+                DestroyCube();
+            }
         }
 
         private void DestroyCube()

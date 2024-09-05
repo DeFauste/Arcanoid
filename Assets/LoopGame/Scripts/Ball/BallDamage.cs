@@ -6,11 +6,7 @@ namespace Assets.LoopGame.Scripts.Ball
     public class BallDamage: MonoBehaviour
     {
         public int forceAttack = 1;
-        private void OnCollisionEnter2D(Collision2D collision)
-        {
-            Attack(collision);
-        }
-        private void OnCollisionStay2D(Collision2D collision)
+        void OnCollisionEnter2D(Collision2D collision)
         {
             Attack(collision);
         }
@@ -20,6 +16,9 @@ namespace Assets.LoopGame.Scripts.Ball
             if (health != null)
             {
                 health.SubHealth(forceAttack);
+            } else
+            {
+                Debug.Log("Null");
             }
         }
     }
