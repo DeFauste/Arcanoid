@@ -33,7 +33,7 @@ namespace Assets.LoopGame.Scripts.Cube
 
         protected virtual void DestroyCube()
         {
-            _score.Score = _cost; 
+            if(_score != null) _score.Score = _cost; 
             Destroy(gameObject);
         }
 
