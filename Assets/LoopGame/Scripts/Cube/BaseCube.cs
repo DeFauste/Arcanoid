@@ -8,10 +8,10 @@ namespace Assets.LoopGame.Scripts.Cube
     {
         [SerializeField] private int _health = 1;
         [SerializeField] private int _cost = 1;
-        private GameProperty _score;
+        private GameProperty _property;
         public void Construct(GameProperty score)
         {
-            _score = score;
+            _property = score;
         }
 
         public void AddHealth(int value)
@@ -33,7 +33,11 @@ namespace Assets.LoopGame.Scripts.Cube
 
         protected virtual void DestroyCube()
         {
-            if(_score != null) _score.Score = _cost; 
+            if (_property != null)
+            {
+                _property.Score = _cost;
+                _property.cubs.Remove(gameObject);
+            }
             Destroy(gameObject);
         }
 

@@ -27,7 +27,6 @@ namespace Assets.LoopGame.Scripts.Factory
             foreach (var pref in prefs)
             {
                 _cubs.Add(pref.name, pref);
-                Debug.Log(pref.name);
             }
         }
     

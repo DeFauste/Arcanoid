@@ -24,7 +24,7 @@ namespace Assets.LoopGame.Scripts.Player
             {
 
                 float stepOffset = 1 / (_collider.bounds.size.x/ 2);
-                float pointX = collision.gameObject.transform.position.x - gameObject.transform.position.x;
+                float pointX = (collision.gameObject.transform.position - gameObject.transform.position).normalized.x;
                 if(Mathf.Abs(pointX) > 0.8)
                 {
                     pointX = pointX > 0 ? 0.8f : -0.8f;

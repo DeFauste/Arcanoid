@@ -1,21 +1,27 @@
 ﻿using Assets.LoopGame.Scripts.Factory;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 
 namespace Assets.LoopGame.Scripts.Level
 {
-    public class PrintMap
+    public class CreateMap
     {
-        int width = 9;
+        int width = 14;
         int height = 10;
+
         private FactoryCube _factoryCube;
         private System.Random _random = new(100);
-        public PrintMap(FactoryCube factoryCube)
+        public CreateMap(FactoryCube factoryCube)
         {
             _factoryCube = factoryCube;
         }
 
-        public void PrintNextLevel(Transform startPoint, int lvl)
+        public List<GameObject> CreateNextLevel(Transform startPoint, int lvl)
         {
+            List<GameObject> list = new List<GameObject>();
             float xStep = 0;
             float yStep = 0;
             if(lvl >  _factoryCube.GetCountCube())
@@ -34,12 +40,14 @@ namespace Assets.LoopGame.Scripts.Level
                         {
                             var bounds = cube.gameObject.GetComponent<BoxCollider2D>().size;
                             xStep = bounds.x;
-                            yStep = bounds.y/2;
+                            yStep = bounds.y;
                         }
                         cube.transform.position = new Vector3(startPoint.position.x + xStep * j, startPoint.position.y - yStep * i, 0);
+                        list.Add(cube);
                     }
                 }
             }
+            return list;
         }
     }
 }
