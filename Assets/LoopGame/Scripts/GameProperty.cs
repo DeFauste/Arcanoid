@@ -8,7 +8,10 @@ namespace Assets.LoopGame.Scripts
     {
         public event Action<int> ScoreEvent;
         public List<GameObject> cubs;
+        public List<GameObject> ball;
         public int currentLvl = 1;
+        
+        public int Health { get; set; } = 3;
 
         private int score = 0;
         public int Score { 

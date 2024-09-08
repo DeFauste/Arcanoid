@@ -2,12 +2,8 @@
 using Assets.LoopGame.Scripts.Inputs;
 using Assets.LoopGame.Scripts.Level;
 using Assets.LoopGame.Scripts.Player;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Assets.LoopGame.Scripts
 {
@@ -15,17 +11,24 @@ namespace Assets.LoopGame.Scripts
     {
         #region UI
         public TextMeshProUGUI scoreView;
+        public TextMeshProUGUI healthView;
         #endregion
 
         private IMoveble moveble = new PCInput();
 
         private GameProperty _gameProperty = new GameProperty();
 
+
+        #region Prefabs
         public GameObject playerPref;
+        public GameObject ballPref;
         public СarriageMoveble carriage;
+        #endregion
 
         #region MapGenerate
         public Transform startPointCube;
+        public Transform startPointPlayer;
+        public Transform startPointBall;
         private FactoryCube _factoryBall;
         private CreateMap _printMap;
         #endregion  
@@ -37,6 +40,8 @@ namespace Assets.LoopGame.Scripts
             carriage.Construct(playerPref, moveble);
             NextLvl();
             Subs();
+            UpdateHealthView();
+            CreateBall();
         }
 
         private void Subs()
@@ -44,12 +49,17 @@ namespace Assets.LoopGame.Scripts
             _gameProperty.ScoreEvent += _ => UpdateScoreView();
         }
 
+        private void CreateBall()
+        {
+            var ball = GameObject.Instantiate(ballPref,playerPref.transform);
+
+        }
+
         public void NextLvl()
         {
             _gameProperty.cubs = _printMap.CreateNextLevel(startPointCube, _gameProperty.currentLvl);
             _gameProperty.currentLvl++;
         }
-
 
         private void UpdateScoreView()
         {
@@ -61,6 +71,14 @@ namespace Assets.LoopGame.Scripts
             {
                 NextLvl();
             }
+        }
+        private void UpdateHealthView()
+        {
+            if (healthView != null)
+            {
+                healthView.text = _gameProperty.Health.ToString();
+            }
+
         }
 
     }
