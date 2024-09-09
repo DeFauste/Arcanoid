@@ -35,7 +35,7 @@ namespace Assets.LoopGame.Scripts.Cube
         {
             if (_property != null)
             {
-                _property.cubs.Remove(gameObject);
+                _property.RemoveCube(gameObject);
                 _property.Score = _cost;
             }
             Destroy(gameObject);

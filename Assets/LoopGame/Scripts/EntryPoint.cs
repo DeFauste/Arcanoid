@@ -36,22 +36,30 @@ namespace Assets.LoopGame.Scripts
         public Transform startPointPlayer;
         public Transform startPointBall;
         private FactoryCube _factoryBall;
+        private FactoryBaff _factoryBaff;
         private CreateMap _printMap;
         #endregion  
         private void Start()
         {
+            LoadClass();
+            Subs();
+        }
+        private void LoadClass()
+        {
             _factoryBall = new FactoryCube(_gameProperty);
             _factoryBall.LoadPref();
             _printMap = new CreateMap(_factoryBall);
-            carriage.Construct(playerPref, moveble);
-            Subs();
+            carriage.Construct(playerPref, moveble, _gameProperty);
+            _factoryBaff = new FactoryBaff(_gameProperty);
+            _factoryBaff.LoadPref();
             _health = _gameProperty.Health;
         }
-
         private void Subs()
         {
             _gameProperty.ScoreEvent += _ => UpdateScoreView();
             _gameProperty.BallDeleteEvent +=  StateBallHealth;
+            _gameProperty.CubePositionDelete += CreteBaffPosition;
+            _gameProperty.HealthEvent += UpdateHealthView;
         }
 
         private void CreateBall()
@@ -70,6 +78,7 @@ namespace Assets.LoopGame.Scripts
             _gameProperty.currentLvl++;
             _gameProperty.speedBall += 0.8f;
             CreateBall();
+            carriage.OnOfMove = true;
         }
 
         private void UpdateScoreView()
@@ -83,11 +92,11 @@ namespace Assets.LoopGame.Scripts
                 GameWin();
             }
         }
-        private void UpdateHealthView()
+        private void UpdateHealthView(int health)
         {
             if (healthView != null)
             {
-                healthView.text = _gameProperty.Health.ToString();
+                healthView.text = health.ToString();
             }
         }
 
@@ -95,25 +104,21 @@ namespace Assets.LoopGame.Scripts
         {
             carriage.OnOfMove = true;
             NextLvl();
-            UpdateHealthView();
+            UpdateHealthView(_gameProperty.Health);
             UpdateScoreView();
         }
         private void StateBallHealth(int count)
         {
             if (count == 0)
             {
-                _gameProperty.Health -= 1;
-                UpdateHealthView();
+                _gameProperty.Health--;
             }
             if (_gameProperty.Health == 0)
             {
                 GameOver();
-            }
-            else if (count == 0)
+            } else if(count ==0)
             {
-                {
-                    CreateBall();
-                }
+                CreateBall();
             }
         }
         private void GameOver()
@@ -136,6 +141,7 @@ namespace Assets.LoopGame.Scripts
             _gameProperty.currentLvl = 1;
             _gameProperty.Score = 0;
             _gameProperty.Health = _health;
+            _gameProperty.DeleteAllBall();
             StartGame();
         }
 
@@ -148,6 +154,17 @@ namespace Assets.LoopGame.Scripts
                 var txt = GameObject.Find("ScoreWinTXT").GetComponent<TextMeshProUGUI>();
                 if (txt != null) txt.text = _gameProperty.Score.ToString();
                 _gameProperty.DeleteAllBall();
+            }
+            if (carriage != null)
+            {
+                carriage.OnOfMove = false;
+            }
+        }
+        private void CreteBaffPosition(Vector2 position)
+        {
+            if(_gameProperty.Score > 0 && _gameProperty.Score % _gameProperty.BaffScore == 0)
+            {
+                _factoryBaff.CreateRandomBaff(position);
             }
         }
     }

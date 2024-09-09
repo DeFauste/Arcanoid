@@ -10,11 +10,13 @@ namespace Assets.LoopGame.Scripts.Player
         private IMoveble _moveble;
         private Rigidbody2D _rbCarriage;
         public bool OnOfMove = false;
-        public void Construct(GameObject carriage, IMoveble moveble)
+        GameProperty _gamePropert;
+        public void Construct(GameObject carriage, IMoveble moveble, GameProperty gameProperty)
         {
             _carriage = carriage;
             _moveble = moveble;
             _rbCarriage = carriage.GetComponent<Rigidbody2D>();
+            _gamePropert = gameProperty;
         }
         private void FixedUpdate()
         {
@@ -25,7 +27,7 @@ namespace Assets.LoopGame.Scripts.Player
         {
             if (_rbCarriage != null && _moveble != null && OnOfMove)
             {
-                _rbCarriage.velocity = new Vector2(10 * _moveble.Direction().x, 0);
+                _rbCarriage.velocity = new Vector2(_gamePropert.speedPlayer * _moveble.Direction().x, 0);
             }
         }
     }

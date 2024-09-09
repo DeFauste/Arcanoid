@@ -8,12 +8,23 @@ namespace Assets.LoopGame.Scripts
     public class GameProperty
     {
         public event Action<int> ScoreEvent;
+        public event Action<int> HealthEvent;
         public event Action<int> BallDeleteEvent;
+        public event Action<Vector2> CubePositionDelete;
         private bool isWin = false;
-        public List<GameObject> cubs;
         public int currentLvl = 1;
         public float speedBall = 5;
-        public int Health { get; set; } = 3;
+        public float speedPlayer = 7;
+        public int BaffScore = 200;
+        private int health = 3;
+        public int Health { 
+            get => health;
+            set
+            {
+                health = value;
+                HealthEvent?.Invoke(health);
+            }
+        }
 
         private int score = 0;
         public int Score {
@@ -24,6 +35,13 @@ namespace Assets.LoopGame.Scripts
                 ScoreEvent?.Invoke(score);
             }
         }
+        public List<GameObject> cubs;
+        public void RemoveCube(GameObject cube)
+        {
+            CubePositionDelete?.Invoke(cube.transform.position);
+            cubs.Remove(cube);
+        }
+
         private List<GameObject> ball = new();
         public void AddBall(GameObject gameObject)
         {
@@ -35,7 +53,10 @@ namespace Assets.LoopGame.Scripts
             {
                 ball.Remove(gameObject);
             }
-            if (!isWin) BallDeleteEvent?.Invoke(ball.Count);
+            if (!isWin)
+            {
+                BallDeleteEvent?.Invoke(ball.Count);
+            }
         }
         public void DeleteAllBall()
         {
