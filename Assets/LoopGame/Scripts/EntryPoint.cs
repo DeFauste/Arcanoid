@@ -1,4 +1,5 @@
-﻿using Assets.LoopGame.Scripts.Factory;
+﻿using Assets.LoopGame.Scripts.Ball;
+using Assets.LoopGame.Scripts.Factory;
 using Assets.LoopGame.Scripts.Inputs;
 using Assets.LoopGame.Scripts.Level;
 using Assets.LoopGame.Scripts.Player;
@@ -47,11 +48,15 @@ namespace Assets.LoopGame.Scripts
         private void Subs()
         {
             _gameProperty.ScoreEvent += _ => UpdateScoreView();
+            _gameProperty.BallDeleteEvent +=  StateBallHealth;
         }
 
         private void CreateBall()
         {
             var ball = GameObject.Instantiate(ballPref,playerPref.transform);
+            var ballMonobeh = ball.GetComponent<BaseBall>();
+            ballMonobeh.Construct(_gameProperty);
+            _gameProperty.AddBall(ball);
 
         }
 
@@ -78,8 +83,25 @@ namespace Assets.LoopGame.Scripts
             {
                 healthView.text = _gameProperty.Health.ToString();
             }
-
         }
 
+        private void StateBallHealth(int count)
+        {
+            if (count == 0)
+            {
+                _gameProperty.Health -= 1;
+                UpdateHealthView();
+            }
+            if (_gameProperty.Health == 0)
+            {
+                Debug.Log("END");
+            }
+            else if (count == 0)
+            {
+                {
+                    CreateBall();
+                }
+            }
+        }
     }
 }

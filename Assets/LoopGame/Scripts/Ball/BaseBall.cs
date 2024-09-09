@@ -3,17 +3,22 @@
 namespace Assets.LoopGame.Scripts.Ball
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class Ball : MonoBehaviour, IBallAction
+    public class BaseBall : MonoBehaviour, IBallAction
     {
-        public float _speed = 5f;
         private Rigidbody2D _rb;
         private bool _isActive = false;
+        private GameProperty _gameProperty;
         
         private void Start()
         {
+            if(_gameProperty == null) Destroy(gameObject);
             _rb = GetComponent<Rigidbody2D>();
         }
 
+        public void Construct(GameProperty gameProperty)
+        {
+            _gameProperty = gameProperty;
+        }
         private void Update()
         {
             if(!_isActive && Input.GetKeyDown(KeyCode.Space))
@@ -26,7 +31,7 @@ namespace Assets.LoopGame.Scripts.Ball
         public void Push(Vector2 direction)
         {
             _rb.velocity = Vector2.zero;
-            _rb.AddForce(direction.normalized * _speed,ForceMode2D.Impulse);
+            _rb.AddForce(direction.normalized * _gameProperty.speedBall, ForceMode2D.Impulse);
         }
         private void FixedUpdate()
         {
@@ -51,7 +56,10 @@ namespace Assets.LoopGame.Scripts.Ball
             {
                 Push(new Vector2(_rb.velocity.x * 0.83f, _rb.velocity.y));
             }
-            //Debug.Log(angle);
+        }
+        private void OnDestroy()
+        {
+            if(_gameProperty != null) _gameProperty.RemoveBall(gameObject);
         }
     }
 }
