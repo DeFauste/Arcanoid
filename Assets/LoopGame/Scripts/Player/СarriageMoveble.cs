@@ -9,6 +9,7 @@ namespace Assets.LoopGame.Scripts.Player
         private GameObject _carriage;
         private IMoveble _moveble;
         private Rigidbody2D _rbCarriage;
+        public bool OnOfMove = false;
         public void Construct(GameObject carriage, IMoveble moveble)
         {
             _carriage = carriage;
@@ -22,7 +23,7 @@ namespace Assets.LoopGame.Scripts.Player
 
         private void Move()
         {
-            if (_rbCarriage != null && _moveble != null)
+            if (_rbCarriage != null && _moveble != null && OnOfMove)
             {
                 _rbCarriage.velocity = new Vector2(10 * _moveble.Direction().x, 0);
             }

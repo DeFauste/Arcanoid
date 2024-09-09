@@ -39,10 +39,7 @@ namespace Assets.LoopGame.Scripts
             _factoryBall.LoadPref();
             _printMap = new CreateMap(_factoryBall);
             carriage.Construct(playerPref, moveble);
-            NextLvl();
             Subs();
-            UpdateHealthView();
-            CreateBall();
         }
 
         private void Subs()
@@ -85,6 +82,13 @@ namespace Assets.LoopGame.Scripts
             }
         }
 
+        public void StartGame()
+        {
+            carriage.OnOfMove = true;
+            CreateBall();
+            NextLvl();
+            UpdateHealthView();
+        }
         private void StateBallHealth(int count)
         {
             if (count == 0)
