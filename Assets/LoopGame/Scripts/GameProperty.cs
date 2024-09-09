@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Assets.LoopGame.Scripts
@@ -8,6 +9,7 @@ namespace Assets.LoopGame.Scripts
     {
         public event Action<int> ScoreEvent;
         public event Action<int> BallDeleteEvent;
+        private bool isWin = false;
         public List<GameObject> cubs;
         public int currentLvl = 1;
         public int speedBall = 5;
@@ -29,8 +31,22 @@ namespace Assets.LoopGame.Scripts
         }
         public void RemoveBall(GameObject gameObject)
         {
-            ball.Remove(gameObject);
-            BallDeleteEvent?.Invoke(ball.Count);
+            if(ball.Contains(gameObject))
+            {
+                ball.Remove(gameObject);
+            }
+            if (!isWin) BallDeleteEvent?.Invoke(ball.Count);
+        }
+        public void DeleteAllBall()
+        {
+            isWin = true;
+            ball.ForEach(ball =>
+            {
+                if(!ball.IsDestroyed())GameObject.Destroy(ball);
+            });
+            ball.Clear();
+
+            isWin = false;
         }
     }
 }

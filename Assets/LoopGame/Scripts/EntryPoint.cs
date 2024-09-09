@@ -5,6 +5,7 @@ using Assets.LoopGame.Scripts.Level;
 using Assets.LoopGame.Scripts.Player;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.LoopGame.Scripts
 {
@@ -13,12 +14,16 @@ namespace Assets.LoopGame.Scripts
         #region UI
         public TextMeshProUGUI scoreView;
         public TextMeshProUGUI healthView;
+        public TextMeshProUGUI lvlView;
+        public GameObject gameOverView;
+        public GameObject gameWinView;
+        public GameObject menuView;
         #endregion
 
         private IMoveble moveble = new PCInput();
 
-        private GameProperty _gameProperty = new GameProperty();
-
+        public GameProperty _gameProperty = new GameProperty();
+        private int _health = 0;
 
         #region Prefabs
         public GameObject playerPref;
@@ -40,6 +45,7 @@ namespace Assets.LoopGame.Scripts
             _printMap = new CreateMap(_factoryBall);
             carriage.Construct(playerPref, moveble);
             Subs();
+            _health = _gameProperty.Health;
         }
 
         private void Subs()
@@ -59,8 +65,10 @@ namespace Assets.LoopGame.Scripts
 
         public void NextLvl()
         {
+            lvlView.text = _gameProperty.currentLvl.ToString();
             _gameProperty.cubs = _printMap.CreateNextLevel(startPointCube, _gameProperty.currentLvl);
             _gameProperty.currentLvl++;
+            CreateBall();
         }
 
         private void UpdateScoreView()
@@ -69,9 +77,9 @@ namespace Assets.LoopGame.Scripts
             {
                 scoreView.text = _gameProperty.Score.ToString();
             }
-            if(_gameProperty.cubs != null && _gameProperty.cubs.Count <= 1)
+            if(_gameProperty.cubs != null && _gameProperty.cubs.Count < 1)
             {
-                NextLvl();
+                GameWin();
             }
         }
         private void UpdateHealthView()
@@ -85,9 +93,9 @@ namespace Assets.LoopGame.Scripts
         public void StartGame()
         {
             carriage.OnOfMove = true;
-            CreateBall();
             NextLvl();
             UpdateHealthView();
+            UpdateScoreView();
         }
         private void StateBallHealth(int count)
         {
@@ -98,13 +106,47 @@ namespace Assets.LoopGame.Scripts
             }
             if (_gameProperty.Health == 0)
             {
-                Debug.Log("END");
+                GameOver();
             }
             else if (count == 0)
             {
                 {
                     CreateBall();
                 }
+            }
+        }
+        private void GameOver()
+        {
+           if(menuView != null) menuView.SetActive(false);
+            if (gameOverView != null)
+            {
+                gameOverView.SetActive(true);
+                var txt = GameObject.Find("ScoreOverTXT").GetComponent<TextMeshProUGUI>();
+                if(txt != null) txt.text = _gameProperty.Score.ToString();
+            }
+            if (carriage != null)
+            {
+                carriage.OnOfMove = false;
+            }
+
+        }
+        public void RestartGame()
+        {
+            _gameProperty.currentLvl = 1;
+            _gameProperty.Score = 0;
+            _gameProperty.Health = _health;
+            StartGame();
+        }
+
+        private void GameWin()
+        {
+            if (menuView != null) menuView.SetActive(false);
+            if (gameWinView != null)
+            {
+                gameWinView.SetActive(true);
+                var txt = GameObject.Find("ScoreWinTXT").GetComponent<TextMeshProUGUI>();
+                if (txt != null) txt.text = _gameProperty.Score.ToString();
+                _gameProperty.DeleteAllBall();
             }
         }
     }

@@ -57,9 +57,5 @@ namespace Assets.LoopGame.Scripts.Ball
                 Push(new Vector2(_rb.velocity.x * 0.83f, _rb.velocity.y));
             }
         }
-        private void OnDestroy()
-        {
-            if(_gameProperty != null) _gameProperty.RemoveBall(gameObject);
-        }
     }
 }
