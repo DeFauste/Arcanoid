@@ -12,7 +12,7 @@ namespace Assets.LoopGame.Scripts
         private bool isWin = false;
         public List<GameObject> cubs;
         public int currentLvl = 1;
-        public int speedBall = 5;
+        public float speedBall = 5;
         public int Health { get; set; } = 3;
 
         private int score = 0;

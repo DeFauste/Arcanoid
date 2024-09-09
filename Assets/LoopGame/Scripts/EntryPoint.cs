@@ -68,6 +68,7 @@ namespace Assets.LoopGame.Scripts
             lvlView.text = _gameProperty.currentLvl.ToString();
             _gameProperty.cubs = _printMap.CreateNextLevel(startPointCube, _gameProperty.currentLvl);
             _gameProperty.currentLvl++;
+            _gameProperty.speedBall += 0.8f;
             CreateBall();
         }
 

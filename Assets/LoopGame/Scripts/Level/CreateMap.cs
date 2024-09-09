@@ -9,10 +9,8 @@ namespace Assets.LoopGame.Scripts.Level
 {
     public class CreateMap
     {
-        //int width = 14;
-        //int height = 10;
-        int width = 1;
-        int height = 1;
+        int width = 14;
+        int height = 6;
 
         private FactoryCube _factoryCube;
         private System.Random _random = new(100);
